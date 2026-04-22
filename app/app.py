@@ -10,7 +10,7 @@ def home():
 @app.route("/menu")
 def menu():
     items = [
-        {"name": "Espresso", "price": "₹120"},
+        {"name": "Espresso", "price": "₹130"},
         {"name": "Cappuccino", "price": "₹180"},
         {"name": "Latte", "price": "₹200"},
         {"name": "Mocha", "price": "₹220"}
