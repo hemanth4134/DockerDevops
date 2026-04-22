@@ -1,8 +1,6 @@
 provider "aws" {
-  region  = "ap-south-1"
-  profile = "default"
+  region = "ap-south-1"
 }
-
 
 resource "aws_ecr_repository" "repo" {
   name = "coffee-shop-app"
@@ -16,12 +14,16 @@ resource "aws_iam_role" "ecs_role" {
   name = "ecsTaskExecutionRoleCoffee"
 
   assume_role_policy = jsonencode({
-    Version = "2008-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = { Service = "ecs-tasks.amazonaws.com" }
-      Action = "sts:AssumeRole"
-    }]
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
   })
 }
 
@@ -39,13 +41,23 @@ resource "aws_ecs_task_definition" "task" {
 
   execution_role_arn = aws_iam_role.ecs_role.arn
 
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
   container_definitions = jsonencode([
     {
-      name  = "coffee-app"
-      image = "${aws_ecr_repository.repo.repository_url}:latest"
-      portMappings = [{
-        containerPort = 3000
-      }]
+      name      = "coffee-app"
+      image     = "${aws_ecr_repository.repo.repository_url}:latest"
+      essential = true
+
+      portMappings = [
+        {
+          containerPort = 3000
+          protocol      = "tcp"
+        }
+      ]
     }
   ])
 }
