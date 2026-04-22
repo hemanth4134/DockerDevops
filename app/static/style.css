@@ -1,0 +1,15 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f4f1ee;
+}
+
+h1 {
+    color: #6b4f4f;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+    margin: 10px;
+}
